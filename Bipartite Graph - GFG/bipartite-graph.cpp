@@ -5,28 +5,31 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 public:
- bool checkBipartiteDfs(int node,vector<int>&color,vector<int>adj[]){
-     if(color[node]==-1){
-         color[node]=0;
-     }
-     for(auto it:adj[node]){
-         if(color[it]==-1){
-             color[it]=1-color[node];
-             if(!checkBipartiteDfs(it,color,adj)){
-                return false; 
+  bool bipartiteBfs(int src,vector<int>&color,vector<int>adj[]){
+      queue<int>q;
+      q.push(src);
+      color[src]=1;
+      while(!q.empty()){
+          int node=q.front();
+          q.pop();
+          for(auto it:adj[node]){
+             if(color[it]==-1){
+                 q.push(it);
+                 color[it]=1-color[node];
+             } else if(color[it]==color[node]){
+                 return false;
              }
-         }else if(color[it]==color[node]){
-             return false;
-         }
-     }
-     return true;
- }
+          }
+         
+      }
+       return true;
+  } 
 	bool isBipartite(int V, vector<int>adj[]){
 	    // Code here
 	    vector<int>color(V,-1);
 	    for(int i=0;i<V;i++){
 	        if(color[i]==-1){
-	            if(!checkBipartiteDfs(i,color,adj)){
+	            if(!bipartiteBfs(i,color,adj)){
 	                return false;
 	            }
 	        }
